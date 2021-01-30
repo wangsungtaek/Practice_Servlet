@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +22,7 @@ input {
 <body>
 	<form action="calc3" method="post">
 		<table>
-			<tr><td class="output" colspan="4">0</td></tr>
+			<tr><td class="output" colspan="4">${3+4}</td></tr>
 			<tr>
 				<td><input type="submit" name="operator" value="CE"></td>
 				<td><input type="submit" name="operator" value="C"></td>

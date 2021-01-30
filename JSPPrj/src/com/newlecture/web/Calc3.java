@@ -56,12 +56,10 @@ public class Calc3 extends HttpServlet {
 			express += (inDot == null)? "":inDot;
 		}
 		
-		Cookie expressCookie = new Cookie("exp", express); // ÄíÅ° »ý¼º
+		Cookie expressCookie = new Cookie("exp", express);
 		if(inOper != null && inOper.equals("C"))
 			expressCookie.setMaxAge(0);
-		response.addCookie(expressCookie); // ÄíÅ° º¸³»±â
+		response.addCookie(expressCookie);
 		response.sendRedirect("calcpage");
-		
-		
 	}
 }
