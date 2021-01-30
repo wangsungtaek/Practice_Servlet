@@ -1,2 +1,2 @@
-# Practice_Servlet
-서블릿공부
+# Practice_Servlet, JSP
+서블릿, JSP 공부
