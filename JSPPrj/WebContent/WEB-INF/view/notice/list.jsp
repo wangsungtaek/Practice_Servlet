@@ -1,9 +1,9 @@
+<%@page import="java.awt.PageAttributes"%>
+<%@page import="com.newlecture.web.entity.Notice"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-	
-
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
@@ -177,17 +177,15 @@
 					</thead>
 					<tbody>
 					
-					<% for(int i=0; i<10; i++){ %>
+					<c:forEach var="n" items="${list}">
 					<tr>
-						<td><%=i+1 %></td>
-						<td class="title indent text-align-left"><a href="detail.html">스프링 8강까지의 예제 코드</a></td>
-						<td>newlec</td>
-						<td>
-							2019-08-18		
-						</td>
-						<td>146</td>
+						<td>${n.id}</td>
+						<td class="title indent text-align-left"><a href="detail?id=${n.id}">${n.title}</a></td>
+						<td>${n.writer_id}</td>
+						<td>${n.regdate}</td>
+						<td>${n.hit}</td>
 					</tr>
-					<%} %>
+					</c:forEach>
 					
 					</tbody>
 				</table>
@@ -259,5 +257,5 @@
             </div>
         </footer>
     </body>
-    
+ 
     </html>
