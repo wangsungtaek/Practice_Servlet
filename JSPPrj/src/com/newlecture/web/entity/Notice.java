@@ -6,10 +6,12 @@ public class Notice {
 	int id;
 	String title;
 	Date regdate;
+	String regdate_S;
 	String writer_id;
 	int hit;
 	String files;
 	String content;
+	int pub;
 	
 	public Notice() {
 	}
@@ -21,6 +23,20 @@ public class Notice {
 		this.hit = hit;
 		this.files = files;
 		this.content = content;
+	}
+	
+	
+	public Notice(int id, String title, String regdate_S, String writer_id, int hit, String files, String content,
+			int pub) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.regdate_S = regdate_S;
+		this.writer_id = writer_id;
+		this.hit = hit;
+		this.files = files;
+		this.content = content;
+		this.pub = pub;
 	}
 	public int getId() {
 		return id;
@@ -63,6 +79,18 @@ public class Notice {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getRegdate_S() {
+		return regdate_S;
+	}
+	public void setRegdate_S(String regdate_S) {
+		this.regdate_S = regdate_S;
+	}
+	public int getPub() {
+		return pub;
+	}
+	public void setPub(int pub) {
+		this.pub = pub;
 	}
 	@Override
 	public String toString() {
