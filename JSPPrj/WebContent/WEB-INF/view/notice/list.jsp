@@ -5,6 +5,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 
@@ -185,7 +186,7 @@
 					<c:forEach var="n" items="${list}" begin="">
 					<tr>
 						<td>${n.id}</td>
-						<td class="title indent text-align-left"><a href="detail?id=${n.id}">${n.title}</a></td>
+						<td class="title indent text-align-left"><a href="detail?id=${n.id}">${n.title}</a><span>[${n.cmtCount}]</span></td>
 						<td>${n.writer_id}</td>
 						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${n.regdate}"/></td>
 						<td>${n.hit}</td>
@@ -196,18 +197,18 @@
 				</table>
 			</div>
 			
+			<c:set var="page" value="${(empty param.p)? 1:param.p}"/>
+			<c:set var="startNum" value="${page-(page-1)%5}"/>
+			<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(count/10), '.')}"/>
+			
 			<div class="indexer margin-top align-right">
 				<h3 class="hidden">현재 페이지</h3>
-				<div><span class="text-orange text-strong">${(empty param.p)?1:param.p}</span> / 1 pages</div>
+				<div><span class="text-orange text-strong">${(empty param.p)?1:param.p}</span> / ${lastNum} pages</div>
 			</div>
 
 			<div class="margin-top align-center pager">	
 		
 	<div>
-	<c:set var="page" value="${(empty param.p)? 1:param.p}"/>
-	<c:set var="startNum" value="${page-(page-1)%5}"/>
-	<c:set var="LastNum" value="23"/>
-		
 		<c:if test="${startNum>1}">
 			<a href="?p=${startNum-1}&t=&q=" class="btn btn-prev">이전</a>
 		</c:if>
@@ -219,14 +220,16 @@
 	
 	<ul class="-list- center">
 		<c:forEach var="i" begin="0" end="4">
+		<c:if test="${(startNum+i) <= lastNum}">
 		<li><a class="-text- ${(page==(startNum+i))?'orange':''} bold" href="?p=${startNum+i}&f=${param.f}&q=${param.q}" >${startNum+i}</a></li>
+		</c:if>
 		</c:forEach>
 	</ul>
 	<div>
-		<c:if test="${startNum+5<LastNum}">
+		<c:if test="${startNum+4<lastNum}">
 			<a href="?p=${startNum+5}&t=&q=" class="btn btn-next">다음</a>
 		</c:if>
-		<c:if test="${startNum+5>=LastNum}">
+		<c:if test="${startNum+4>=lastNum}">
 			<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
 		</c:if>
 	</div>

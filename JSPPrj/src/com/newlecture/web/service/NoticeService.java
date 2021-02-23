@@ -11,27 +11,49 @@ import java.util.Date;
 import java.util.List;
 
 import com.newlecture.web.entity.Notice;
+import com.newlecture.web.entity.NoticeView;
 
 public class NoticeService {
 	
+	public int removeNoticeAll(int[] ids) {
+		
+		return 0;
+	}
+	public int pubNoticeAll(int[] ids) {
+		return 0;
+	}
+	public int insertNotice(Notice notice) {
+		return 0;
+	}
+	public int deleteNotice(int id) {
+		return 0;
+	}
+	public int updateNotice(Notice notice) {
+		return 0;
+	}	
+	List<Notice> getNoticeNewstList() {
+		return null;
+	}
+	
+
 	// List Read
-	public List<Notice> getNoticeList(){
+	public List<NoticeView> getNoticeList(){
 		
 		return getNoticeList("title", "", 1);
 	}
 	
-	public List<Notice> getNoticeList(int page){
+	public List<NoticeView> getNoticeList(int page){
 		
 		return getNoticeList("title", "", page);
 	}
 	
-	public List<Notice> getNoticeList(String field, String query, int page){
+	public List<NoticeView> getNoticeList(String field, String query, int page){
 		
-		List<Notice> list = new ArrayList<>();
+		List<NoticeView> list = new ArrayList<>();
 		
 		String sql = "SELECT * FROM ("
 				+ "	SELECT ROWNUM NUM, n.*"
-				+ "	FROM (SELECT * FROM NOTICE1 WHERE "+field+" LIKE ? ORDER BY REGDATE DESC) n"
+				+ "	FROM (SELECT * FROM NOTICE_VIEW WHERE "+field+" LIKE ? ORDER BY REGDATE DESC) n"
 				+ ") "
 				+ "WHERE NUM BETWEEN ? AND ?";
 		
@@ -57,8 +79,9 @@ public class NoticeService {
 				Date regdate = rs.getDate("regdate");
 				int hit = rs.getInt("hit");
 				String files = rs.getString("files");
-				String content = rs.getString("content");
-				list.add(new Notice(id,title,regdate,writer_id,hit,files,content));
+				//String content = rs.getString("content");
+				int cmtCount = rs.getInt("CMT_COUNT");
+				list.add(new NoticeView(id,title,regdate,writer_id,hit,files,cmtCount));
 			}
 			
 			rs.close();
@@ -85,7 +108,7 @@ public class NoticeService {
 		int count = 0;
 		String sql = "SELECT COUNT(ID) count FROM ("
 				+ "	SELECT ROWNUM NUM, n.*"
-				+ "	FROM (SELECT * FROM NOTICE1 WHERE"+field+" LIKE ? ORDER BY REGDATE DESC) n"
+				+ "	FROM (SELECT * FROM NOTICE1 WHERE "+field+" LIKE ? ORDER BY REGDATE DESC) n"
 				+ ") ";
 		
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
@@ -237,50 +260,38 @@ public class NoticeService {
 		return notice;
 	}
 	// insert
-	public void insertNotice(Notice n) {
-		String sql = "INSERT INTO notice1 VALUES (?,?,?,?,to_date(?,'YYYY-MM-DD HH24:mi:ss'),?,?,?)";
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection(url,"scott", "tiger");
-			PreparedStatement st = con.prepareStatement(sql);
-			st.setInt(1, n.getId());
-			st.setString(2, n.getTitle());
-			st.setString(3, n.getWriter_id());
-			st.setString(4, n.getContent());
-			st.setString(5, n.getRegdate_S());
-			st.setInt(6, n.getHit());
-			st.setString(7, n.getFiles());
-			st.setInt(8, n.getPub());
-			
-			st.executeUpdate();
-						
-			st.close();
-			con.close();
-			
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	public void insertNotice(Notice n) {
+//		String sql = "INSERT INTO notice1 VALUES (?,?,?,?,to_date(?,'YYYY-MM-DD HH24:mi:ss'),?,?,?)";
+//		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+//		
+//		try {
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//			Connection con = DriverManager.getConnection(url,"scott", "tiger");
+//			PreparedStatement st = con.prepareStatement(sql);
+//			st.setInt(1, n.getId());
+//			st.setString(2, n.getTitle());
+//			st.setString(3, n.getWriter_id());
+//			st.setString(4, n.getContent());
+//			st.setString(5, n.getRegdate_S());
+//			st.setInt(6, n.getHit());
+//			st.setString(7, n.getFiles());
+//			st.setInt(8, n.getPub());
+//			
+//			st.executeUpdate();
+//						
+//			st.close();
+//			con.close();
+//			
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 	
 	public static void main(String[] args) {
 //		NoticeService dao = new NoticeService();
-//		int day = 2;
-//		for(int i = 36; i<60; i++) {
-//			dao.insertNotice(new Notice(i,
-//										"JSP를 활용한..",
-//										"2021-03-"+day+" 13:30:"+i,
-//										"newlec",
-//										0,
-//										"none",
-//										"게시판을 만들기 위한....",
-//										0));
-//			day++;
-//		}
 	}
 }
