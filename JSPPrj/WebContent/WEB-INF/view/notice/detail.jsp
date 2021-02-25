@@ -164,7 +164,7 @@
 								</tr>
 								<tr>
 									<th>작성자</th>
-									<td>${n.writer_id}</td>
+									<td>${n.writerId}</td>
 									<th>조회수</th>
 									<td><fmt:formatNumber type="number" pattern="##,####" value="${n.hit}" /> </td>
 								</tr>

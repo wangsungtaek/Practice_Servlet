@@ -15,26 +15,58 @@ import com.newlecture.web.entity.NoticeView;
 
 public class NoticeService {
 	
+	
 	public int removeNoticeAll(int[] ids) {
-		
 		return 0;
 	}
+	
 	public int pubNoticeAll(int[] ids) {
 		return 0;
 	}
+	
 	public int insertNotice(Notice notice) {
-		return 0;
+		int result = 0;
+		
+		String sql = "INSERT INTO NOTICE1(ID,TITLE, CONTENT, WRITER_ID, PUB)\n"
+				   + "VALUES (NOTICE_SEQ.NEXTVAL, ? , ? , ? , ?)";
+		
+		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection(url,"scott", "tiger");
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, notice.getTitle());
+			st.setString(2, notice.getContent());
+			st.setString(3, notice.getWriterId());
+			st.setBoolean(4, notice.getPub());
+			
+			result = st.executeUpdate();
+			
+			st.close();
+			con.close();
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
 	}
+	
 	public int deleteNotice(int id) {
 		return 0;
 	}
+	
 	public int updateNotice(Notice notice) {
 		return 0;
 	}	
+	
 	List<Notice> getNoticeNewstList() {
 		return null;
 	}
-	
 
 	// List Read
 	public List<NoticeView> getNoticeList(){
@@ -71,17 +103,28 @@ public class NoticeService {
 			st.setInt(3, page*10);
 			
 			ResultSet rs = st.executeQuery();
-			
+//			int id, String title, Date regdate, String regdate_S, String writer_id, int hit, String files,
+//			String content, boolean pub			
 			while(rs.next()){
 				int id = rs.getInt("id");
 				String title = rs.getString("title");
-				String writer_id = rs.getString("writer_id");
+				String writerId = rs.getString("writer_id");
 				Date regdate = rs.getDate("regdate");
-				int hit = rs.getInt("hit");
+				String hit = rs.getString("hit");
 				String files = rs.getString("files");
 				//String content = rs.getString("content");
 				int cmtCount = rs.getInt("CMT_COUNT");
-				list.add(new NoticeView(id,title,regdate,writer_id,hit,files,cmtCount));
+				boolean pub = rs.getBoolean("pub");
+				
+				list.add(new NoticeView(
+						id,
+						title,
+						writerId,
+						regdate,
+						hit,
+						files,
+						pub,
+						cmtCount));
 			}
 			
 			rs.close();
@@ -154,12 +197,24 @@ public class NoticeService {
 			if(rs.next()){
 				int nid = rs.getInt("id");
 				String title = rs.getString("title");
-				String writer_id = rs.getString("writer_id");
+				String writerId = rs.getString("writer_id");
 				Date regdate = rs.getDate("regdate");
-				int hit = rs.getInt("hit");
+				String hit = rs.getString("hit");
 				String files = rs.getString("files");
 				String content = rs.getString("content");
-				notice = new Notice(id,title,regdate,writer_id,hit,files,content);
+				boolean pub = rs.getBoolean("pub");
+				 
+				notice = new Notice(
+						id,
+						title,
+						writerId,
+						regdate,
+						hit,
+						files,
+						content,
+						pub
+				);
+				
 			}
 			
 			rs.close();
@@ -197,12 +252,23 @@ public class NoticeService {
 			if(rs.next()){
 				int nid = rs.getInt("id");
 				String title = rs.getString("title");
-				String writer_id = rs.getString("writer_id");
+				String writerId = rs.getString("writer_id");
 				Date regdate = rs.getDate("regdate");
-				int hit = rs.getInt("hit");
+				String hit = rs.getString("hit");
 				String files = rs.getString("files");
 				String content = rs.getString("content");
-				notice = new Notice(id,title,regdate,writer_id,hit,files,content);
+				boolean pub = rs.getBoolean("pub");
+				 
+				notice = new Notice(
+						id,
+						title,
+						writerId,
+						regdate,
+						hit,
+						files,
+						content,
+						pub
+				);
 			}
 			
 			rs.close();
@@ -237,12 +303,23 @@ public class NoticeService {
 			if(rs.next()){
 				int nid = rs.getInt("id");
 				String title = rs.getString("title");
-				String writer_id = rs.getString("writer_id");
+				String writerId = rs.getString("writer_id");
 				Date regdate = rs.getDate("regdate");
-				int hit = rs.getInt("hit");
+				String hit = rs.getString("hit");
 				String files = rs.getString("files");
 				String content = rs.getString("content");
-				notice = new Notice(id,title,regdate,writer_id,hit,files,content);
+				boolean pub = rs.getBoolean("pub");
+				 
+				notice = new Notice(
+						id,
+						title,
+						writerId,
+						regdate,
+						hit,
+						files,
+						content,
+						pub
+				);
 			}
 			
 			rs.close();
@@ -292,6 +369,44 @@ public class NoticeService {
 //	}
 	
 	public static void main(String[] args) {
-//		NoticeService dao = new NoticeService();
+		NoticeService dao = new NoticeService();
+		Notice notice = new Notice();
+		notice.setTitle("새로운공지");
+		notice.setContent("새로운공지");
+		notice.setPub(true);
+		notice.setWriterId("newlec");
+		System.out.println(dao.insertNotice(notice));
+	}
+	public int deleteNoticeAll(int[] ids) {
+		int result = 0;
+		
+		String params = "";
+		for(int i=0; i<ids.length; i++) {
+			params += ids[i];
+			if(i < ids.length-1)
+				params += ",";
+		}
+		String sql = "DELETE NOTICE1 WHERE ID IN ("+params+")";
+		
+		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection(url,"scott", "tiger");
+			Statement st = con.createStatement();
+			
+			result = st.executeUpdate(sql);
+			
+			st.close();
+			con.close();
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

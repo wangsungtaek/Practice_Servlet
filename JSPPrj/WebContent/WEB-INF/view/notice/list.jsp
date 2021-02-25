@@ -187,7 +187,7 @@
 					<tr>
 						<td>${n.id}</td>
 						<td class="title indent text-align-left"><a href="detail?id=${n.id}">${n.title}</a><span>[${n.cmtCount}]</span></td>
-						<td>${n.writer_id}</td>
+						<td>${n.writerId}</td>
 						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${n.regdate}"/></td>
 						<td>${n.hit}</td>
 					</tr>
