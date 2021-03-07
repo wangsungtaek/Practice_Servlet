@@ -48,8 +48,10 @@ public class RegController extends HttpServlet{
 //			fos.write(b);
 //		}
 		StringBuilder builder = new StringBuilder();
+		
 		for(Part p : parts) {
 			if(!p.getName().equals("file")) continue;
+			if(p.getSize() == 0) continue;
 			
 			Part filePart = p;
 			// 파일명을 읽어온다.
@@ -60,6 +62,12 @@ public class RegController extends HttpServlet{
 			InputStream fis = filePart.getInputStream();
 			// 절대경로를 얻는다
 			String realPath = request.getServletContext().getRealPath("/upload");
+			
+			File path = new File(realPath);
+			if(!path.exists())
+				path.mkdirs();
+			
+			
 			
 			// 절대경로 + 구분자 + 파일이름
 			// 운영체제별로 파일 경로 구분자가 다르기 때문에 자바에서 제공하는 

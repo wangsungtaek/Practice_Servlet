@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -29,19 +30,32 @@ public class ListController extends HttpServlet{
 		String[] openIds = request.getParameterValues("open-id");
 		String[] delIds = request.getParameterValues("del-id");
 		String cmd = request.getParameter("cmd");
+		String ids_ = request.getParameter("ids");
+		String[] ids = ids_.trim().split(" ");
+		
+		NoticeService service = new NoticeService();
 		
 		switch(cmd) {
 		case "일괄공개":
 			for(String openId : openIds)
 				System.out.printf("open id : %s\n",openId);
+			
+			// 정적인 배열을 동적인 배열로 변경 (체크된 ID)
+			List<String> oids = Arrays.asList(openIds);
+			List<String> cids = new ArrayList(Arrays.asList(ids));
+			cids.removeAll(oids);
+			System.out.println(Arrays.asList(ids));
+			System.out.println(oids);
+			System.out.println(cids);
+			
 			break;
 		case "일괄삭제":
-			NoticeService service = new NoticeService();
-			int[] ids = new int[delIds.length];
-			for(int i=0; i<ids.length; i++)
-				ids[i] = Integer.parseInt(delIds[i]);
 			
-			int result = service.deleteNoticeAll(ids);
+			int[] ids1 = new int[delIds.length];
+			for(int i=0; i<ids.length; i++)
+				ids1[i] = Integer.parseInt(delIds[i]);
+			
+			int result = service.deleteNoticeAll(ids1);
 			break;
 		}
 		
